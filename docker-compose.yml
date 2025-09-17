@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: trading-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: trading_user
+      POSTGRES_PASSWORD: trading_pass
+      POSTGRES_DB: trading
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: trading-backend
+    restart: always
+    depends_on:
+      - db
+    env_file:
+     - ${ENV_FILE:-/etc/dokploy/env/indicadores-tecnicos.env}
+
+    ports:
+      - "3000:3000"
+
+# 👇 Declaración del volumen persistente
+volumes:
+  db_data:

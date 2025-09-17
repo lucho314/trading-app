@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Candle {
+  id          BigInt   @id @default(autoincrement())
+  symbol      String
+  interval    String    // e.g., "4h", "1d"
+  openTime    DateTime
+  closeTime   DateTime
+  open        Decimal   @db.Decimal(20,10)
+  high        Decimal   @db.Decimal(20,10)
+  low         Decimal   @db.Decimal(20,10)
+  close       Decimal   @db.Decimal(20,10)
+  volume      Decimal   @db.Decimal(30,10)
+  createdAt   DateTime  @default(now())
+
+  @@index([symbol, interval, openTime])
+  @@unique([symbol, interval, openTime]) // evitar duplicados
+}
+
+model Indicator {
+  id          String   @id @default(cuid())
+  symbol      String
+  interval    String   // ej: "240" para 4h
+  calculatedAt DateTime @default(now())
+
+  sma20       Float?
+  ema20       Float?
+  rsi14       Float?
+  macd        Json?     // guardamos estructura { MACD, signal, histogram }
+  bollinger   Json?     // { lower, middle, upper }
+  atr14       Float?
+  adx14       Json?     // { adx, pdi, mdi }
+  stochastic  Json?     // { k, d }
+  obv         Float?
+  close       Float?
+
+  @@index([symbol, interval, calculatedAt], name: "idx_symbol_interval_date")
+  @@index([calculatedAt], name: "idx_calculatedAt")
+}
+
