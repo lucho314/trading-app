@@ -21,6 +21,9 @@ export class CandleService {
 
     for (const c of candles) {
       try {
+        //truncar los datos de la tabla
+        void this.prisma.$executeRaw`TRUNCATE TABLE Candle`;
+
         await this.prisma.candle.upsert({
           where: {
             symbol_interval_openTime: {

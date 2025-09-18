@@ -1,8 +1,18 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { openai } from '@ai-sdk/openai';
-import { generateText } from 'ai';
+import { generateObject, generateText } from 'ai';
 import { LlmPayload } from '@/analysis/type';
 import { LlmDecision } from './type';
+import z from 'zod';
+
+export const LlmDecisionSchema = z.object({
+  action: z.enum(['SHORT', 'LONG', 'HOLD', 'WAIT']),
+  confidence: z.number().min(0).max(100),
+  entryPrice: z.number(),
+  stopLoss: z.number(),
+  takeProfit: z.number(),
+  rrRatio: z.number(),
+});
 
 @Injectable()
 export class LlmService {
@@ -45,14 +55,18 @@ export class LlmService {
       `;
 
     try {
-      const { text } = await generateText({
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      const { object } = await generateObject({
         model: openai('gpt-4o-mini'), // ⚡ rápido y barato
         system: systemPrompt,
         prompt: JSON.stringify(payload),
         temperature: 0.6,
+        schema: LlmDecisionSchema,
       });
 
-      const parsed = JSON.parse(text) as LlmDecision;
+      const parsed = object as LlmDecision;
+      this.logger.log(`✅ Análisis LLM completado: ${JSON.stringify(parsed)}`);
       return parsed;
     } catch (error) {
       this.logger.error(`❌ Error analizando con LLM: ${error}`);
