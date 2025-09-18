@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { openai } from '@ai-sdk/openai';
-import { generateObject, generateText } from 'ai';
+import { generateObject } from 'ai';
 import { LlmPayload } from '@/analysis/type';
 import { LlmDecision } from './type';
 import z from 'zod';
@@ -21,24 +21,24 @@ export class LlmService {
   async analyze(payload: LlmPayload): Promise<LlmDecision | null> {
     const systemPrompt = `
       Eres un analista de trading muy arriesgado (apalancamiento 3-5X).
-      Recibirás un JSON con los siguientes datos:
+      Recibirás un JSON con datos de mercado.
 
-      - symbol: par de trading (ej: BTCUSDT).
-      - interval: intervalo en minutos (ej: 240 para 4h).
-      - timeframe: descripción del rango de tiempo.
-      - currentPrice: último precio de cierre.
-      - high: precio máximo del rango.
-      - low: precio mínimo del rango.
-      - changePercent: variación porcentual en el rango.
-      - indicators: valores técnicos (SMA20, EMA20, RSI14, MACD, Bollinger, ATR14, ADX, Stochastic, OBV, etc).
-      - signals: lista de señales clasificadas como 'potential' o 'weak' con sus detalles.
-      - history: últimos cálculos de indicadores (ej: rsi14, macd, últimos 10 registros).
-
-      Con toda esa información, decide UNA acción de trading entre:
+      Debes decidir UNA acción de trading entre:
       - SHORT
       - LONG
       - HOLD
       - WAIT
+
+      ⚠️ Reglas obligatorias para los valores numéricos:
+      - "entryPrice" debe estar siempre cercano a "currentPrice" (±1% como máximo).
+      - Si la acción es "LONG":
+        - "stopLoss" < "entryPrice"
+        - "takeProfit" > "entryPrice"
+      - Si la acción es "SHORT":
+        - "stopLoss" > "entryPrice"
+        - "takeProfit" < "entryPrice"
+      - "rrRatio" = |takeProfit - entryPrice| / |entryPrice - stopLoss| (calcula o aproxima un valor coherente).
+      - Todos los precios deben ser valores positivos y consistentes con el rango (entre "low" y "high").
 
       Responde siempre en JSON válido con este formato exacto:
 
@@ -53,6 +53,8 @@ export class LlmService {
 
       No devuelvas explicación, solo el JSON.
       `;
+
+    console.log('Payload LLM:', JSON.stringify(payload, null, 2));
 
     try {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment

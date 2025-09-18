@@ -18,7 +18,7 @@ export class AnalysisService {
     const highs = candles.map((c) => Number(c.high));
     const lows = candles.map((c) => Number(c.low));
 
-    const currentPrice = closes.at(-1) ?? 0;
+    const currentPrice = indicators.close ?? 0;
     const high = Math.max(...highs);
     const low = Math.min(...lows);
 
