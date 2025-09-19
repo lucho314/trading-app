@@ -30,8 +30,8 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.trading-backend.rule=Host(`tradingdash.duckdns.org`)"
       - "traefik.http.routers.trading-backend.entrypoints=websecure"
-      - "traefik.http.routers.trading-backend.tls.certresolver=myresolver"
       - "traefik.http.services.trading-backend.loadbalancer.server.port=8001"
+
     networks:
       - dokploy-network
 
