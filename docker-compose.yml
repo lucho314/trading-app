@@ -36,8 +36,8 @@ services:
 
 networks:
   default:
-    external:
-      name: traefik_default  # 👈 la red de Traefik
+    external: true
+    name: dokploy-network
 
 volumes:
   db_data:
