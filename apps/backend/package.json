@@ -21,7 +21,8 @@
     "seed": "ts-node -r tsconfig-paths/register prisma/seed.ts",
     "test:task": "ts-node -r tsconfig-paths/register src/test-task.ts",
     "test:telegram": "ts-node -r tsconfig-paths/register src/test-telegram.ts",
-    "test:llm": "ts-node -r tsconfig-paths/register src/test-llm.ts"
+    "test:llm": "ts-node -r tsconfig-paths/register src/test-llm.ts",
+    "test:bybit": "ts-node -r tsconfig-paths/register src/test-bybit.ts"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.32",
@@ -33,6 +34,7 @@
     "@prisma/client": "^6.16.2",
     "ai": "^5.0.45",
     "axios": "^1.12.2",
+    "bybit-api": "^4.3.1",
     "openai": "^5.20.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",

@@ -199,8 +199,22 @@ export class SignalsService {
 
   shouldCallModel(ind: IndicatorsResult): boolean {
     const signals = this.evaluateIndicators(ind);
-    return signals.some(
-      (s) => s.strength === 'potential' || s.strength === 'strong',
+
+    // Filtramos solo los "principales"
+    const primarySignals = signals.filter((s) =>
+      [
+        'RSI Oversold',
+        'RSI Overbought',
+        'MACD Bullish Crossover',
+        'MACD Bearish Crossover',
+        'Price above Bollinger Upper Band (overbought)',
+        'Price below Bollinger Lower Band (oversold)',
+        'ADX Strong Uptrend',
+        'ADX Strong Downtrend',
+      ].includes(s.type),
     );
+
+    // Solo si hay alguna señal "potencial" en los principales → llamamos al LLM
+    return primarySignals.some((s) => s.strength === 'potential');
   }
 }

@@ -20,7 +20,8 @@ export class LlmService {
 
   async analyze(payload: LlmPayload): Promise<LlmDecision | null> {
     const systemPrompt = `
-      Eres un analista de trading muy arriesgado (apalancamiento 3-5X).
+      Eres un analista de trading muy arriesgado con 10+ años en mercados cripto. (apalancamiento 3-5X).
+      Tu objetivo es identificar oportunidades de entrada con alto potencial risk/reward en timeframe 4H.
       Recibirás un JSON con datos de mercado.
 
       Debes decidir UNA acción de trading entre:
@@ -28,30 +29,8 @@ export class LlmService {
       - LONG
       - HOLD
       - WAIT
-
-      ⚠️ Reglas obligatorias para los valores numéricos:
-      - "entryPrice" debe estar siempre cercano a "currentPrice" (±1% como máximo).
-      - Si la acción es "LONG":
-        - "stopLoss" < "entryPrice"
-        - "takeProfit" > "entryPrice"
-      - Si la acción es "SHORT":
-        - "stopLoss" > "entryPrice"
-        - "takeProfit" < "entryPrice"
-      - "rrRatio" = |takeProfit - entryPrice| / |entryPrice - stopLoss| (calcula o aproxima un valor coherente).
-      - Todos los precios deben ser valores positivos y consistentes con el rango (entre "low" y "high").
-
-      Responde siempre en JSON válido con este formato exacto:
-
-      {
-        "action": "SHORT | LONG | HOLD | WAIT",
-        "confidence": 0-100,
-        "entryPrice": number,
-        "stopLoss": number,
-        "takeProfit": number,
-        "rrRatio": number
-      }
-
-      No devuelvas explicación, solo el JSON.
+      **PERFIL DE RIESGO**: 'Agresivo pero calculado. Toma posiciones cuando la probabilidad sea favorable, pero mantén gestión de riesgo estricta. Busca RR ratio mínimo 2:1. Usa stop loss ajustados para limitar pérdidas. Prioriza setups con alta probabilidad de éxito basado en análisis técnico y patrones históricos.'
+  
       `;
 
     console.log('Payload LLM:', JSON.stringify(payload, null, 2));
