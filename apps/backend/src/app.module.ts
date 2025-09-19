@@ -11,19 +11,21 @@ import { CandleModule } from './candle/candle.module';
 import { SignalsModule } from './signals/signals.module';
 import { AnalysisModule } from './analysis/analysis.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { TradingSignalsModule } from './trading-signals/trading-signals.module';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
+    PrismaModule,
     BybitModule,
     IndicatorsModule,
     TelegramModule,
-    LlmModule,
     TasksModule,
     CandleModule,
     SignalsModule,
     AnalysisModule,
-    PrismaModule,
+    TradingSignalsModule,
+    LlmModule,
   ],
   controllers: [AppController],
   providers: [AppService],

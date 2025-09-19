@@ -21,7 +21,7 @@ export class BybitService {
     this.client = new RestClientV5({
       key: process.env.BYBIT_API_KEY,
       secret: process.env.BYBIT_API_SECRET,
-      testnet: true, // true si usás el entorno de pruebas
+      testnet: false, // true si usás el entorno de pruebas
     });
   }
 
@@ -120,7 +120,7 @@ export class BybitService {
     );
   }
 
-  async checkPositions(symbol: string): Promise<PositionSummary> {
+  async checkPositions(symbol: string): Promise<PositionSummary | null> {
     const response = await this.client.getPositionInfo({
       category: 'linear', // o 'inverse' / 'spot' / 'option'
       symbol: symbol,
@@ -133,7 +133,7 @@ export class BybitService {
 
     const position = result.list.at(0); // Asumimos que solo hay una posición por símbolo
     if (!position || Number(position.size) === 0) {
-      throw new Error(`No hay posiciones abiertas para ${symbol}`);
+      return null;
     }
     const summary: PositionSummary = {
       symbol: position.symbol,
@@ -167,6 +167,7 @@ export class BybitService {
   }
 
   async openPosition(params: OpenPositionParams) {
+    console.log('Abriendo posición en Bybit:', params);
     // setear leverage si viene
     if (params.leverage) {
       await this.client.setLeverage({
@@ -190,6 +191,7 @@ export class BybitService {
       stopLoss: params.stopLoss?.toString(),
     });
 
+    console.log('Orden enviada:', res);
     return res;
   }
 }

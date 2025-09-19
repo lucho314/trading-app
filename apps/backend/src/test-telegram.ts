@@ -7,15 +7,18 @@ async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
 
   const telegram = app.get(TelegramService);
-
-  await telegram.notify({
-    action: 'LONG',
-    confidence: 85,
-    entryPrice: 950,
-    stopLoss: 930,
-    takeProfit: 980,
-    rrRatio: 1.5,
-  });
+  const id = BigInt(1);
+  await telegram.notify(
+    {
+      action: 'LONG',
+      confidence: 85,
+      entryPrice: 950,
+      stopLoss: 930,
+      takeProfit: 980,
+      rrRatio: 1.5,
+    },
+    id,
+  );
 
   await app.close();
 }

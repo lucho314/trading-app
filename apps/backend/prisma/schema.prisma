@@ -52,3 +52,52 @@ model Indicator {
   @@index([calculatedAt], name: "idx_calculatedAt")
 }
 
+model TradingSignal {
+  id        BigInt @id @default(autoincrement())
+  symbol    String
+  action    Action
+  confidence Float?
+  entryPrice Float?
+  stopLoss   Float?
+  takeProfit Float?
+  rrRatio    Float?
+  timeframe  String @default("4H")
+  payload    Json
+
+  status     SignalStatus @default(PENDING)
+  executedAt DateTime?
+  executionOrderId String?
+  closePrice Float?
+  pnl        Float?
+  result     TradeResult?
+
+  expiresAt  DateTime @default(dbgenerated("now() + interval '1 hour'")) // <---
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+enum Action {
+  SHORT
+  LONG
+  HOLD
+  WAIT
+  ADD
+  CLOSE
+  MOVE_SL
+  TAKE_PROFIT
+}
+
+enum SignalStatus {
+  PENDING
+  EXECUTED
+  CANCELLED
+  FAILED
+  EXPIRED
+}
+
+enum TradeResult {
+  WIN
+  LOSS
+  BE
+}

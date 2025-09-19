@@ -7,6 +7,7 @@ import { AnalysisService } from '@/analysis/analysis.service';
 import { SignalsService } from '@/signals/signals.service';
 import { LlmService } from '@/llm/llm.service';
 import { TelegramService } from '@/telegram/telegram.service';
+import { TradingSignalsService } from '@/trading-signals/trading-signals.service';
 
 @Injectable()
 export class TasksService {
@@ -24,6 +25,7 @@ export class TasksService {
     private readonly signalsService: SignalsService,
     private readonly llmService: LlmService,
     private readonly telegramService: TelegramService,
+    private readonly tradingSignalsService: TradingSignalsService,
   ) {}
 
   @Cron(CronExpression.EVERY_4_HOURS, {
@@ -84,11 +86,15 @@ export class TasksService {
         `Indicadores calculados ${this.symbol} ${this.interval}m: ${JSON.stringify(indicators)}`,
       );
 
-      if (!this.signalsService.shouldCallModel(indicators)) {
-        this.logger.log(
-          `No se cumplen las condiciones para llamar al modelo LLM para ${this.symbol} ${this.interval}m`,
-        );
-        return;
+      //verificamos si tenemos operacion abierta
+      const openPositon = await this.bybitService.checkPositions(this.symbol);
+      if (!openPositon) {
+        if (!this.signalsService.shouldCallModel(indicators)) {
+          this.logger.log(
+            `No se cumplen las condiciones para llamar al modelo LLM para ${this.symbol} ${this.interval}m`,
+          );
+          return;
+        }
       }
 
       const payload = await this.analysisService.buildLlmPayload(
@@ -98,9 +104,11 @@ export class TasksService {
         this.interval,
       );
 
-      const decision = await this.llmService.analyze(payload);
+      const decision = await this.llmService.analyze(payload, openPositon);
+
       if (decision) {
-        await this.telegramService.notify(decision);
+        const { id } = await this.tradingSignalsService.create(decision); // Guardar decisión en BD
+        await this.telegramService.notify(decision, id);
       }
     } catch (error) {
       if (error instanceof Error) {
