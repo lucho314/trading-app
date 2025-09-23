@@ -19,6 +19,6 @@ RUN pnpm --filter backend exec prisma generate
 
 RUN pnpm --filter backend  build
 
-EXPOSE 3000
+EXPOSE 8001
 CMD ["node", "apps/backend/dist/src/main.js"]
 

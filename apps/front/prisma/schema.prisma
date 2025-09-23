@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Candle {
+  id        BigInt   @id @default(autoincrement())
+  symbol    String
+  interval  String
+  openTime  DateTime
+  closeTime DateTime
+  open      Decimal  @db.Decimal(20, 10)
+  high      Decimal  @db.Decimal(20, 10)
+  low       Decimal  @db.Decimal(20, 10)
+  close     Decimal  @db.Decimal(20, 10)
+  volume    Decimal  @db.Decimal(30, 10)
+  createdAt DateTime @default(now())
+
+  @@unique([symbol, interval, openTime])
+  @@index([symbol, interval, openTime])
+}
+
+model Indicator {
+  id           String   @id
+  symbol       String
+  interval     String
+  calculatedAt DateTime @default(now())
+  sma20        Float?
+  ema20        Float?
+  rsi14        Float?
+  macd         Json?
+  bollinger    Json?
+  atr14        Float?
+  adx14        Json?
+  stochastic   Json?
+  obv          Float?
+  close        Float?
+
+  @@index([calculatedAt], map: "idx_calculatedAt")
+  @@index([symbol, interval, calculatedAt], map: "idx_symbol_interval_date")
+}
+
+model TradingSignal {
+  id               BigInt       @id @default(autoincrement())
+  symbol           String
+  action           Action
+  confidence       Float?
+  entryPrice       Float?
+  stopLoss         Float?
+  takeProfit       Float?
+  rrRatio          Float?
+  timeframe        String       @default("4H")
+  payload          Json
+  status           SignalStatus @default(PENDING)
+  executedAt       DateTime?
+  executionOrderId String?
+  closePrice       Float?
+  pnl              Float?
+  result           TradeResult?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime
+  expiresAt        DateTime     @default(dbgenerated("(now() + '01:00:00'::interval)"))
+}
+
+enum Action {
+  SHORT
+  LONG
+  HOLD
+  WAIT
+  ADD
+  CLOSE
+  MOVE_SL
+  TAKE_PROFIT
+}
+
+enum SignalStatus {
+  PENDING
+  EXECUTED
+  CANCELLED
+  FAILED
+  EXPIRED
+}
+
+enum TradeResult {
+  WIN
+  LOSS
+  BE
+}
