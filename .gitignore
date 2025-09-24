@@ -65,3 +65,4 @@ db_data
 # ======================
 coverage
 *.lcov
+apps/front/prisma/seed.ts

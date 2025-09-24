@@ -77,15 +77,15 @@ export function IndicatorsGrid({ indicators }: IndicatorsGridProps) {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">Precio Actual:</span>
-                      <span className="font-mono font-semibold">${indicator.close?.toLocaleString()}</span>
+                      <span className="font-mono font-semibold">${indicator.close?.toLocaleString("en-US")}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">SMA 20:</span>
-                      <span className="font-mono">${indicator.sma20?.toLocaleString()}</span>
+                      <span className="font-mono">${indicator.sma20?.toLocaleString("en-US")}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">EMA 20:</span>
-                      <span className="font-mono">${indicator.ema20?.toLocaleString()}</span>
+                      <span className="font-mono">${indicator.ema20?.toLocaleString("en-US")}</span>
                     </div>
                   </div>
                 </div>
@@ -136,15 +136,15 @@ export function IndicatorsGrid({ indicators }: IndicatorsGridProps) {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">Superior:</span>
-                      <span className="font-mono">${indicator.bollinger.upper.toLocaleString()}</span>
+                      <span className="font-mono">${indicator.bollinger.upper.toLocaleString("en-US")}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">Media:</span>
-                      <span className="font-mono">${indicator.bollinger.middle.toLocaleString()}</span>
+                      <span className="font-mono">${indicator.bollinger.middle.toLocaleString("en-US")}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">Inferior:</span>
-                      <span className="font-mono">${indicator.bollinger.lower.toLocaleString()}</span>
+                      <span className="font-mono">${indicator.bollinger.lower.toLocaleString("en-US")}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">%B:</span>
@@ -194,7 +194,7 @@ export function IndicatorsGrid({ indicators }: IndicatorsGridProps) {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">OBV:</span>
-                      <span className="font-mono">{indicator.obv?.toLocaleString()}</span>
+                      <span className="font-mono">{indicator.obv?.toLocaleString("en-US")}</span>
                     </div>
                   </div>
                 </div>

@@ -101,3 +101,13 @@ enum TradeResult {
   LOSS
   BE
 }
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  password  String   // guardamos el hash
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

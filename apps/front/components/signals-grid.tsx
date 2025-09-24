@@ -85,9 +85,9 @@ export function SignalsGrid({ signals }: SignalsGridProps) {
                 <TableCell>
                   <Badge variant="outline">{signal.confidence}%</Badge>
                 </TableCell>
-                <TableCell className="font-mono">${signal.entryPrice?.toLocaleString()}</TableCell>
-                <TableCell className="font-mono text-red-600">${signal.stopLoss?.toLocaleString()}</TableCell>
-                <TableCell className="font-mono text-green-600">${signal.takeProfit?.toLocaleString()}</TableCell>
+                <TableCell className="font-mono">${signal.entryPrice?.toLocaleString("en-US")}</TableCell>
+                <TableCell className="font-mono text-red-600">${signal.stopLoss?.toLocaleString("en-US")}</TableCell>
+                <TableCell className="font-mono text-green-600">${signal.takeProfit?.toLocaleString("en-US")}</TableCell>
                 <TableCell>
                   <Badge variant="secondary">{signal.rrRatio}:1</Badge>
                 </TableCell>

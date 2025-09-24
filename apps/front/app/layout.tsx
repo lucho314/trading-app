@@ -5,6 +5,7 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import "./globals.css"
+import UserNav from "@/components/user-nav"
 
 export const metadata: Metadata = {
   title: "Trading App - Señales e Indicadores",
@@ -19,8 +20,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
+      
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
-        <Suspense fallback={null}>{children}</Suspense>
+        <Suspense fallback={null}>
+          <UserNav />
+          {children}
+          </Suspense>
         <Analytics />
       </body>
     </html>

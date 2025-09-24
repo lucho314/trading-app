@@ -66,6 +66,16 @@ model TradingSignal {
   expiresAt        DateTime     @default(dbgenerated("(now() + '01:00:00'::interval)"))
 }
 
+model User {
+  id        String   @id
+  email     String   @unique
+  name      String?
+  password  String
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
 enum Action {
   SHORT
   LONG
