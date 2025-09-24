@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { TrendingUp, BarChart3, Activity } from "lucide-react"
 import CryptoMarket from "@/components/CryptoMarket"
+import PositionStatus from "@/components/PositionStatus"
 
 export default async function HomePage() {
   return (
@@ -60,6 +61,7 @@ export default async function HomePage() {
             </CardContent>
           </Card>
           <CryptoMarket />
+          <PositionStatus symbol="BTCUSDT" />
 
         </div>
 
