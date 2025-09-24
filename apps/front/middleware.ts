@@ -9,5 +9,5 @@ export default auth((req) => {
 })
 
 export const config = {
-  matcher: ["/signals/:path*","/indicators/:path*"],
+  matcher: ["/signals/:path*","/indicators/:path*","/"],
 }

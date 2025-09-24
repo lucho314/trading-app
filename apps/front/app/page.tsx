@@ -2,8 +2,9 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { TrendingUp, BarChart3, Activity } from "lucide-react"
+import CryptoMarket from "@/components/CryptoMarket"
 
-export default function HomePage() {
+export default async function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
       <div className="container mx-auto px-4 py-8">
@@ -58,6 +59,8 @@ export default function HomePage() {
               </Button>
             </CardContent>
           </Card>
+          <CryptoMarket />
+
         </div>
 
         <div className="mt-12 text-center">
