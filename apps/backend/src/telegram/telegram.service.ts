@@ -84,7 +84,7 @@ export class TelegramService {
         await this.bybitService.openPosition({
           symbol: signal.symbol,
           side: signal.action === 'LONG' ? 'Buy' : 'Sell',
-          size: 0.003, // cantidad fija por ahora
+          size: 0.004, // cantidad fija por ahora
           leverage: signal.rrRatio ?? 3, // default 3 si no viene
           takeProfit: signal.takeProfit ?? undefined,
           stopLoss: signal.stopLoss ?? undefined,
